@@ -59,7 +59,7 @@ export async function setupNitroBridge () {
 
   // Resolve config
   const _nitroConfig = (nuxt.options as any).nitro || {} as NitroConfig
-  const nitroConfig: NitroConfig = defu(_nitroConfig, <NitroConfig>{
+  const nitroConfig: NitroConfig = defu(_nitroConfig, <NitroConfig> {
     rootDir: resolve(nuxt.options.rootDir),
     srcDir: resolve(nuxt.options.srcDir, 'server'),
     dev: nuxt.options.dev,
@@ -85,7 +85,7 @@ export async function setupNitroBridge () {
     },
     publicAssets: [
       {
-        baseURL: nuxt.options.app.buildAssetsDir,
+        baseURL: (nuxt.options as any).bridge.vite ? '/' : nuxt.options.app.buildAssetsDir,
         dir: resolve(nuxt.options.buildDir, 'dist/client')
       },
       ...nuxt.options._layers
@@ -168,7 +168,7 @@ export async function setupNitroBridge () {
       for (const file of publicFiles) {
         try {
           fsExtra.rmSync(join(clientDist, file))
-        } catch {}
+        } catch { }
       }
     }
 
@@ -314,7 +314,7 @@ export async function setupNitroBridge () {
       } else {
         const distDir = resolve(nuxt.options.rootDir, 'dist')
         if (!existsSync(distDir)) {
-          await fsp.symlink(nitro.options.output.publicDir, distDir, 'junction').catch(() => {})
+          await fsp.symlink(nitro.options.output.publicDir, distDir, 'junction').catch(() => { })
         }
       }
     }
@@ -331,7 +331,7 @@ export async function setupNitroBridge () {
       }
       const processPages = (pages: NuxtPage[], currentPath = '/') => {
         for (const page of pages) {
-        // Skip dynamic paths
+          // Skip dynamic paths
           if (page.path.includes(':')) { continue }
 
           const path = joinURL(currentPath, page.path)

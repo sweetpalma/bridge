@@ -11,6 +11,8 @@ export class AsyncLoadingPlugin {
     const TemplatePath = _require.resolve('webpack/lib/Template', { paths: [...this.opts.modulesDir] })
     this.Template = _require(TemplatePath)
   }
+  
+  // test
 
   apply (compiler: Compiler) {
     compiler.hooks.compilation.tap('AsyncLoading', (compilation) => {
